@@ -1,5 +1,8 @@
-import javax.swing.JPanel;
+import javax.swing.JFrame;
 
-public class SetGame extends JPanel {
-        
+public class SetGameGUI extends JFrame{
+
+    public final static int WIDTH = 800;
+    public final static int HEIGHT = 1300;
+    
 }
