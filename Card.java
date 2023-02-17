@@ -1,4 +1,6 @@
 public class Card {
+
+    private static final String IMG_PATH_FORMAT_STRING = "img/card%s%s.png";
     
     private Colour colour;
     private Shape shape;
@@ -51,6 +53,6 @@ public class Card {
 
     @Override
     public String toString(){
-        return this.s;
+        return String.format(IMG_PATH_FORMAT_STRING, this.s, "%s");
     }
 }
