@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
@@ -48,14 +49,17 @@ public class GamePanel extends JPanel{
     private JButton noSetButton;
     private JButton hintButton;
     private JButton newGameButton;
+    private MouseListener mouseListener;
     private SetGameLogic board;
 
     public GamePanel(SetGameLogic board){
         this.board = board;
 
-        //setPreferredSize(new Dimension(CARD_PANEL_WIDTH+BUTTON_PANEL_WIDTH, PANEL_HEIGHT));
+        setBackground(SetGame.BACKGROUND_COLOUR);
+
+        setPreferredSize(new Dimension(CARD_PANEL_WIDTH+BUTTON_PANEL_WIDTH+LABEL_MARGIN, PANEL_HEIGHT));
         
-        cardPanel = new JPanel(new GridLayout(3,4,40,40));
+        cardPanel = new JPanel(new GridLayout(3,4));
         cardPanel.setBackground(SetGame.BACKGROUND_COLOUR);
         cardPanel.setPreferredSize(new Dimension(CARD_PANEL_WIDTH,PANEL_HEIGHT));
     
@@ -122,6 +126,7 @@ public class GamePanel extends JPanel{
         button.setVisible(true);
         button.setEnabled(true);
         button.setText(text);
+        button.addMouseListener(getMouseListeners()[0]);
     }
 
 
