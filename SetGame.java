@@ -34,12 +34,8 @@ public class SetGame extends JFrame{
 
     private void intializeGUI(){
         setBackground(BACKGROUND_COLOUR);
-       
         score = 0;
-        
-
-
-        gamePanel = new GamePanel();
+        gamePanel = new GamePanel(board);
         
         add(gamePanel, BorderLayout.CENTER);
     }
