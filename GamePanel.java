@@ -11,21 +11,20 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel{
 
-    public final static int CARD_PANEL_WIDTH = 595;
-    public final static int BUTTON_PANEL_WIDTH = 150;
-    public final static int PANEL_HEIGHT = 470;
+    public static final  int CARD_PANEL_WIDTH = 1190;
+    public final static int BUTTON_PANEL_WIDTH = 300;
+    public final static int PANEL_HEIGHT = 940;
     
 
-    public final static int CARD_TOP_X = 57;
-    public static final int CARD_TOP_EX = 20;
-    public final static int CARD_TOP_Y = 20;
+    public final static int CARD_TOP_X = 114;
+    public static final int CARD_TOP_EX = 40;
+    public final static int CARD_TOP_Y = 40;
 
-    public static final int CARD_WIDTH = 95;
-    public static final int CARD_HEIGHT = 130;
-    public static final int CARD_INC_X = 115;
-    public static final int CARD_INC_Y = 150;
+    public static final int CARD_WIDTH = 190;
+    public static final int CARD_HEIGHT = 260;
+    public static final int CARD_INC_X = 230;
+    public static final int CARD_INC_Y = 300;
 
-    public static final Color BACKGROUND_COLOUR = new Color(Integer.parseInt("008000",16));
 
     private Point[] cardLocations;
     private Point[] cardLocations_EX;
@@ -34,7 +33,7 @@ public class GamePanel extends JPanel{
 
     public GamePanel(){
         setPreferredSize(new Dimension(CARD_PANEL_WIDTH + BUTTON_PANEL_WIDTH, PANEL_HEIGHT));
-        setBackground(BACKGROUND_COLOUR);
+    
         cardLocations = new Point[12];
         cardLocations_EX = new Point[15];
         extended = false;
@@ -52,6 +51,7 @@ public class GamePanel extends JPanel{
     }
 
     public void paintComponent(Graphics g){
+        
         int numberOfCards = extended ? 15 : 12;
         for (int i = 0; i < numberOfCards; ++i){
             BufferedImage cardImage = readImage(String.format(board.cardAt(i).toString(),""));

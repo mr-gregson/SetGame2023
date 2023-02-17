@@ -1,8 +1,7 @@
-
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 
-
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -11,17 +10,6 @@ import javax.swing.UIManager;
 public class SetGame extends JFrame{
 
     // Game Panel Dimensions
-
-    
-    public static final int BUTTON_HEIGHT = 60;
-    public static final int BUTTON_WIDTH = 130;
-    public static final int SCORE_LABEL_HEIGHT = 60;
-    public static final int LABEL_WIDTH = 110;
-
-    public static final int LABEL_MARGIN = 20;
-
-
-    
     private static final String BLANK_PATH_STRING = "/img/blank.png";
 
     private SetGameLogic board;
@@ -30,9 +18,8 @@ public class SetGame extends JFrame{
 
     private JPanel gamePanel;
 
-    private JButton noSetButton;
-    private JButton hintButton;
-    private JButton newGameButton;
+    public static final Color BACKGROUND_COLOUR = new Color(Integer.parseInt("008000",16));
+    public static final Font font = new Font(Font.SERIF,Font.BOLD,16);
     
     public SetGame(SetGameLogic board) {
         this.board = board;
@@ -46,9 +33,11 @@ public class SetGame extends JFrame{
     }
 
     private void intializeGUI(){
+        setBackground(BACKGROUND_COLOUR);
        
         score = 0;
         
+
 
         gamePanel = new GamePanel();
         
