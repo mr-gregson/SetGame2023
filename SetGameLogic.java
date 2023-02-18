@@ -1,11 +1,13 @@
+import java.util.List;
+
 public class SetGameLogic {
     
     private Deck deck;
     private Card[] board;
     private boolean extraCards;
 
-    public final static int BOARD_SIZE = 12;
-    public final static int BOARD_SIZE_X = 15;
+    public static final int BOARD_SIZE = 12;
+    public static final int BOARD_SIZE_X = 15;
 
     public SetGameLogic() {
         this.deck = new Deck();
@@ -25,12 +27,12 @@ public class SetGameLogic {
         return board[n];
     }
 
-    public boolean isSet(Card[] cards){
+    public boolean isSet(List<Card> selectedCards){
         int[][] attributes = new int[3][];
         int[] mods;
         boolean[] matches = new boolean[4];
         for (int i = 0; i < attributes.length; ++i){
-            attributes[i] = cards[i].getAttributes();
+            attributes[i] = selectedCards.get(i).getAttributes();
         }
         mods = addColsMod3(attributes);
 
@@ -63,7 +65,7 @@ public class SetGameLogic {
     }
 
     private int[] addColsMod3(int[][] matrix){
-        int[] mods = new int[matrix.length];
+        int[] mods = new int[matrix[0].length];
         for (int i = 0; i < mods.length; ++i){
             mods[i] = sum(matrix[i],0);
         }
