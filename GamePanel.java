@@ -26,7 +26,7 @@ public class GamePanel extends JPanel {
 
     public static final int CARD_WIDTH = 190;
     public static final int CARD_HEIGHT = 262;
-    public static final int CARD_INC_X = 40;
+    public static final int CARD_INC_X = 20;
     public static final int CARD_INC_Y = 40;
 
     public static final int BUTTON_HEIGHT = 60;
@@ -35,6 +35,8 @@ public class GamePanel extends JPanel {
     public static final int LABEL_WIDTH = 110;
 
     public static final int LABEL_MARGIN = 40;
+
+    public static final String BLANK_PATH_STRING = "img/blank.png";
 
     private static final Pattern pattern = Pattern.compile("\\d+");
 
@@ -55,7 +57,7 @@ public class GamePanel extends JPanel {
     public GamePanel(SetGameLogic board) {
         this.board = board;
         this.isSelected = new boolean[15];
-        this.numberOfCards = SetGame.BOARD_SIZE;
+        this.numberOfCards = SetGame.BOARD_SIZE_X;
         this.selectedCards = new ArrayList<>();
         this.score = 0;
 
@@ -123,14 +125,21 @@ public class GamePanel extends JPanel {
 
     private void updateCards() {
         for (int i = 0; i < numberOfCards; ++i) {
-            cardButtons[i].update(readImage(String.format(board.cardAt(i).toString(), isSelected[i]?"S":"")));            
+            if (board.cardAt(i) == null) 
+                cardButtons[i].update(readImage(BLANK_PATH_STRING));   
+            else
+                cardButtons[i].update(readImage(String.format(board.cardAt(i).toString(), isSelected[i]?"S":"")));            
         }
         repaint();
     }
 
     private void buttonAction(MouseEvent e) {
         String name = e.getComponent().getName();
-        if (name.equals("No Set")) cardPanel.extend();
+        if (name.equals("No Set")){
+            cardPanel.extend();
+            System.out.println("extend");
+        }
+         
         if (name.equals("Hint")) cardPanel.collapse();
         repaint();
     }
