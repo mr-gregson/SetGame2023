@@ -38,10 +38,8 @@ public class GamePanel extends JPanel {
 
     public static final String BLANK_PATH_STRING = "img/blank.png";
 
-    private static final Pattern pattern = Pattern.compile("\\d+");
-
     private boolean[] isSelected;
-    private List<Card> selectedCards;
+    private List<Integer> selectedCards;
     private CardButton[] cardButtons;
     private int score;
     private boolean extended;
@@ -148,14 +146,20 @@ public class GamePanel extends JPanel {
         CardButton cardButton = (CardButton) e.getComponent();
         int i = cardButton.getIndex();
         isSelected[i] = !isSelected[i];
-        if (isSelected[i])
-            selectedCards.add(board.cardAt(i));
-        else
-            selectedCards.remove(board.cardAt(i));
-        if (selectedCards.size() == 3 && board.isSet(selectedCards)) {
-            score += 1;
-            System.out.println("SET");
+        if (isSelected[i]){
+            selectedCards.add(i);
+            if (selectedCards.size() == 3 && board.isSet(selectedCards)) {
+                score += 1;
+                System.out.println("SET");
+                board.replaceCards(selectedCards);
+                for (Integer j: selectedCards) 
+                    isSelected[j] = false;
+                selectedCards.clear();                
+            }
         }
+        else
+            selectedCards.remove(Integer.valueOf(i));
+        
         updateCards();
     }
 
@@ -168,10 +172,4 @@ public class GamePanel extends JPanel {
         }
         return image;
     }
-
-    private static boolean isNumeric(String s) {
-
-        return pattern.matcher(s).matches();
-    }
-
 }

@@ -4,7 +4,10 @@ import javax.swing.JPanel;
 
 import java.awt.Dimension;
 
+
 public class CardPanel extends JPanel {
+
+    CardButton[] cardButtons;
 
     private JPanel[] columns;
 

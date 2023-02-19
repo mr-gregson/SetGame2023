@@ -27,19 +27,14 @@ public class SetGameLogic {
         return board[n];
     }
 
-    public boolean isSet(List<Card> selectedCards){
-        int[][] attributes = new int[3][];
-        int[] mods;
-        boolean[] matches = new boolean[4];
-        for (int i = 0; i < attributes.length; ++i){
-            attributes[i] = selectedCards.get(i).getAttributes();
+    public void replaceCards(List<Integer> selectedCards){
+        for (Integer i: selectedCards){
+            board[i] = deck.isEmpty() ? null : deck.deal();
         }
-        mods = addColsMod3(attributes);
+    }
 
-        for (int i = 0; i < matches.length; ++i){
-            matches[i] = mods[i] == 0;
-        }
-        return all(matches, 0);
+    public boolean isSet(List<Integer> selectedCards){
+        return true;
     }
 
     public String notSetMessage(Card[] cards){
@@ -53,13 +48,15 @@ public class SetGameLogic {
         return "";
     }
 
-    private boolean all(boolean[] bs, int start){
+    // Utility methods
+
+    private static boolean all(boolean[] bs, int start){
         if (start >= bs.length) return true;
         if (!bs[start]) return false;
         return all(bs, start+1);
     }
 
-    private int sum(int[] ns, int start){
+    private static int sum(int[] ns, int start){
         if (start >= ns.length) return 0;
         return ns[start] + sum(ns,start+1);
     }
@@ -71,7 +68,4 @@ public class SetGameLogic {
         }
         return mods;
     }
-
-
-    
 }
