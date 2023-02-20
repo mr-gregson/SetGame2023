@@ -8,10 +8,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
@@ -48,6 +48,8 @@ public class GamePanel extends JPanel {
     private JButton noSetButton;
     private JButton hintButton;
     private JButton newGameButton;
+    private JLabel scoreLabel;
+    private JLabel messageLabel; 
     private MouseListener mouseListener;
     private SetGameLogic board;
     private int numberOfCards;
@@ -123,42 +125,47 @@ public class GamePanel extends JPanel {
 
     private void updateCards() {
         for (int i = 0; i < numberOfCards; ++i) {
-            if (board.cardAt(i) == null) 
-                cardButtons[i].update(readImage(BLANK_PATH_STRING));   
+            if (board.cardAt(i) == null)
+                cardButtons[i].update(readImage(BLANK_PATH_STRING));
             else
-                cardButtons[i].update(readImage(String.format(board.cardAt(i).toString(), isSelected[i]?"S":"")));            
+                cardButtons[i].update(readImage(String.format(board.cardAt(i).toString(), isSelected[i] ? "S" : "")));
         }
         repaint();
     }
 
     private void buttonAction(MouseEvent e) {
         String name = e.getComponent().getName();
-        if (name.equals("No Set")){
+        if (name.equals("No Set")) {
             cardPanel.extend();
-            System.out.println("extend");
         }
-         
-        if (name.equals("Hint")) cardPanel.collapse();
+
+        if (name.equals("Hint"))
+            cardPanel.collapse();
         repaint();
     }
 
     private void cardAction(MouseEvent e) {
         CardButton cardButton = (CardButton) e.getComponent();
         int i = cardButton.getIndex();
+        if (board.cardAt(i) == null) return;
         isSelected[i] = !isSelected[i];
-        if (isSelected[i]){
+        if (isSelected[i])
             selectedCards.add(i);
-            if (selectedCards.size() == 3 && board.isSet(selectedCards)) {
+        else
+            selectedCards.remove(Integer.valueOf(i));
+        if (selectedCards.size() == 3) {
+            if (board.isSet(selectedCards)) {
                 score += 1;
                 System.out.println("SET");
                 board.replaceCards(selectedCards);
-                for (Integer j: selectedCards) 
-                    isSelected[j] = false;
-                selectedCards.clear();                
+            } else {
+                score -= 1;
+                System.out.println("Not a set");
             }
+            for (Integer j : selectedCards)
+                isSelected[j] = false;
+            selectedCards.clear();
         }
-        else
-            selectedCards.remove(Integer.valueOf(i));
         
         updateCards();
     }
