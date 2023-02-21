@@ -7,7 +7,9 @@ public class SetGameLogic {
     private Deck deck;
     private Card[] board;
     private boolean isExtended;
-
+    private int score;
+    // Game Panel Dimensions
+    
     public static final int BOARD_SIZE = 12;
     public static final int BOARD_SIZE_X = 15;
 
@@ -20,6 +22,7 @@ public class SetGameLogic {
     public void startNewGame(){
         deck.shuffle();
         isExtended = false;
+        this.score = 0;
         for (int i = 0; i < BOARD_SIZE; ++i) board[i] = deck.deal();
         for (int i = BOARD_SIZE; i < BOARD_SIZE_X; ++i) board[i] = null;
     }
@@ -109,6 +112,14 @@ public class SetGameLogic {
     public String notSetMessage(Card[] cards){
     
         return "Not a set";
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void updateScore(int points){
+        score = Math.max(score + points, 0);
     }
 
     // Utility methods

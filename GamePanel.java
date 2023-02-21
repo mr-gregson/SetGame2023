@@ -1,3 +1,8 @@
+/**
+ * 
+ * @author mr-gregson
+ * @version 1.0
+ */
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -19,13 +24,8 @@ import javax.swing.SwingConstants;
 
 public class GamePanel extends JPanel {
 
-    public static final int CARD_PANEL_WIDTH = 1190;
     public static final int BUTTON_PANEL_WIDTH = 200;
     public static final int PANEL_HEIGHT = 940;
-
-    public static final int CARD_TOP_X = 114;
-    public static final int CARD_TOP_EX = 40;
-    public static final int CARD_TOP_Y = 40;
 
     public static final int CARD_WIDTH = 190;
     public static final int CARD_HEIGHT = 262;
@@ -42,30 +42,45 @@ public class GamePanel extends JPanel {
 
     public static final String BLANK_PATH_STRING = "img/blank.png";
 
+    /**
+     * Read an image file if <code>filename</code>, return null otherwise
+     * 
+     * @param filename
+     * @return
+     */
+    private static BufferedImage readImage(String filename) {
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(new FileInputStream(filename));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
+
     private boolean[] isSelected;
     private List<Integer> selectedCards;
     private CardButton[] cardButtons;
-    private int score;
     private CardPanel cardPanel;
     private JPanel buttonPanel;
     private JButton noSetButton;
     private JButton hintButton;
     private JButton newGameButton;
-    private JLabel scoreLabel;
-    private JLabel messageLabel; 
+    private JLabel scoreLabel; 
+    private JLabel messageLabel;
     private MouseListener mouseListener;
     private SetGameLogic board;
+
     private int numberOfCards;
 
     public GamePanel(SetGameLogic board) {
         this.board = board;
         this.isSelected = new boolean[15];
-        this.numberOfCards = SetGame.BOARD_SIZE_X;
+        this.numberOfCards = SetGameLogic.BOARD_SIZE_X;
         this.selectedCards = new ArrayList<>();
-        this.score = 0;
 
         setBackground(SetGame.BACKGROUND_COLOUR);
-        setPreferredSize(new Dimension(CARD_PANEL_WIDTH + BUTTON_PANEL_WIDTH + LABEL_MARGIN, PANEL_HEIGHT));
+        setPreferredSize(new Dimension(CardPanel.CARD_PANEL_WIDTH + BUTTON_PANEL_WIDTH + LABEL_MARGIN, PANEL_HEIGHT));
 
         setName("GamePanel");
 
@@ -80,7 +95,7 @@ public class GamePanel extends JPanel {
             }
         };
 
-        cardButtons = new CardButton[SetGame.BOARD_SIZE_X];
+        cardButtons = new CardButton[SetGameLogic.BOARD_SIZE_X];
 
         for (int i = 0; i < cardButtons.length; ++i) {
             CardButton cardButton = new CardButton(mouseListener, i);
@@ -88,7 +103,7 @@ public class GamePanel extends JPanel {
         }
 
         cardPanel = new CardPanel(cardButtons);
-        cardPanel.setPreferredSize(new Dimension(CARD_PANEL_WIDTH, PANEL_HEIGHT));
+        cardPanel.setPreferredSize(new Dimension(CardPanel.CARD_PANEL_WIDTH, PANEL_HEIGHT));
 
         updateCards();
 
@@ -169,8 +184,8 @@ public class GamePanel extends JPanel {
     }
 
     private void updateScore(int points) {
-        score = Math.max(score+points, 0);
-        scoreLabel.setText("Score: " + this.score);
+        board.updateScore(points);
+        scoreLabel.setText("Score: " + board.getScore());
     }
 
     private void buttonAction(MouseEvent e) {
@@ -218,15 +233,5 @@ public class GamePanel extends JPanel {
         }
         
         updateCards();
-    }
-
-    private static BufferedImage readImage(String filename) {
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(new FileInputStream(filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return image;
     }
 }

@@ -9,10 +9,6 @@ import javax.swing.UIManager;
 
 public class SetGame extends JFrame{
 
-    // Game Panel Dimensions
-    public static final int BOARD_SIZE = 12;
-    public static final int BOARD_SIZE_X = 15;
-
     private SetGameLogic board;
     
     private JPanel gamePanel;

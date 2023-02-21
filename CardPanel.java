@@ -11,10 +11,12 @@ public class CardPanel extends JPanel {
 
     private JPanel[] columns;
 
+    public static final int CARD_PANEL_WIDTH = 1190;
+
     public CardPanel(CardButton[] cardButtons) {
         this.columns = new JPanel[5];
         setBackground(SetGame.BACKGROUND_COLOUR);
-        setPreferredSize(new Dimension(GamePanel.CARD_PANEL_WIDTH,GamePanel.PANEL_HEIGHT));
+        setPreferredSize(new Dimension(CardPanel.CARD_PANEL_WIDTH,GamePanel.PANEL_HEIGHT));
 
         for (int i = 0; i < columns.length; ++i) {
             columns[i] = new JPanel();
