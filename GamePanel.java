@@ -10,14 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 public class GamePanel extends JPanel {
 
     public static final int CARD_PANEL_WIDTH = 1190;
-    public static final int BUTTON_PANEL_WIDTH = 130;
+    public static final int BUTTON_PANEL_WIDTH = 200;
     public static final int PANEL_HEIGHT = 940;
 
     public static final int CARD_TOP_X = 114;
@@ -29,10 +32,11 @@ public class GamePanel extends JPanel {
     public static final int CARD_INC_X = 20;
     public static final int CARD_INC_Y = 40;
 
-    public static final int BUTTON_HEIGHT = 60;
-    public static final int BUTTON_WIDTH = 130;
-    public static final int SCORE_LABEL_HEIGHT = 60;
-    public static final int LABEL_WIDTH = 110;
+    public static final int BUTTON_HEIGHT = 120;
+    public static final int BUTTON_WIDTH = BUTTON_PANEL_WIDTH;
+    public static final int SCORE_LABEL_HEIGHT = BUTTON_HEIGHT;
+    public static final int MESSAGE_LABEL_HEIGHT = 200;
+    public static final int LABEL_WIDTH = BUTTON_PANEL_WIDTH;
 
     public static final int LABEL_MARGIN = 40;
 
@@ -42,7 +46,6 @@ public class GamePanel extends JPanel {
     private List<Integer> selectedCards;
     private CardButton[] cardButtons;
     private int score;
-    private boolean extended;
     private CardPanel cardPanel;
     private JPanel buttonPanel;
     private JButton noSetButton;
@@ -90,32 +93,60 @@ public class GamePanel extends JPanel {
         updateCards();
 
         buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         buttonPanel.setBackground(SetGame.BACKGROUND_COLOUR);
         buttonPanel.setPreferredSize(new Dimension(BUTTON_PANEL_WIDTH, PANEL_HEIGHT));
 
         add(cardPanel);
-        add(buttonPanel);
 
-        extended = false;
+        scoreLabel = new JLabel("ScoreLabel", SwingConstants.CENTER);
+        scoreLabel.setFont(SetGame.font);
+        scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        scoreLabel.setPreferredSize(new Dimension(LABEL_WIDTH, SCORE_LABEL_HEIGHT));
+        scoreLabel.setVisible(true);
+        updateScore(0);
+
+        messageLabel = new JLabel("messageLabel", SwingConstants.CENTER);
+        messageLabel.setFont(SetGame.font);
+        scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        messageLabel.setPreferredSize(new Dimension(LABEL_WIDTH, MESSAGE_LABEL_HEIGHT));
+        messageLabel.setVisible(true);
+        messageLabel.setAlignmentX(CENTER_ALIGNMENT);
+        updateMessage("");
+
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, LABEL_MARGIN)));
+        
+        buttonPanel.add(scoreLabel);
+
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, LABEL_MARGIN)));
 
         noSetButton = new JButton();
         initButton(noSetButton, "No Set");
         buttonPanel.add(noSetButton);
 
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, LABEL_MARGIN)));
+
         hintButton = new JButton();
         initButton(hintButton, "Hint");
         buttonPanel.add(hintButton);
+
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, LABEL_MARGIN)));
 
         newGameButton = new JButton();
         initButton(newGameButton, "New Game");
         buttonPanel.add(newGameButton);
 
-        addMouseListener(mouseListener);
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, LABEL_MARGIN)));
+
+        buttonPanel.add(messageLabel);
+
+        add(buttonPanel);
     }
 
     private void initButton(JButton button, String text) {
         button.setName(text);
         button.setFont(SetGame.font);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
         button.setVisible(true);
         button.setEnabled(true);
@@ -133,14 +164,29 @@ public class GamePanel extends JPanel {
         repaint();
     }
 
+    private void updateMessage(String message) {
+        messageLabel.setText(message);
+    }
+
+    private void updateScore(int points) {
+        score = Math.max(score+points, 0);
+        scoreLabel.setText("Score: " + this.score);
+    }
+
     private void buttonAction(MouseEvent e) {
         String name = e.getComponent().getName();
         if (name.equals("No Set")) {
-            cardPanel.extend();
+           /*  if (board.hasSet()) {
+                updateScore(-1);
+                updateMessage("There is a set. Try again!");
+            } else { */
+                updateScore(2);
+                updateMessage("No Set!");
+                board.extendBoard();
+                cardPanel.extend();
+           // }
         }
-
-        if (name.equals("Hint"))
-            cardPanel.collapse();
+        updateCards();
         repaint();
     }
 
@@ -155,12 +201,16 @@ public class GamePanel extends JPanel {
             selectedCards.remove(Integer.valueOf(i));
         if (selectedCards.size() == 3) {
             if (board.isSet(selectedCards)) {
-                score += 1;
-                System.out.println("SET");
-                board.replaceCards(selectedCards);
+                updateScore(1);
+                updateMessage("Set!");
+                if (board.isExtended()){
+                    board.collapseBoard(selectedCards);
+                    cardPanel.collapse();
+                }
+                else board.replaceCards(selectedCards);
             } else {
-                score -= 1;
-                System.out.println("Not a set");
+                updateScore(-1);
+                updateMessage("Not a set");
             }
             for (Integer j : selectedCards)
                 isSelected[j] = false;

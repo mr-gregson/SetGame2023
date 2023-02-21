@@ -15,12 +15,10 @@ public class SetGame extends JFrame{
 
     private SetGameLogic board;
     
-    private int score;
-
     private JPanel gamePanel;
 
     public static final Color BACKGROUND_COLOUR = new Color(Integer.parseInt("008000",16));
-    public static final Font font = new Font(Font.SERIF,Font.BOLD,16);
+    public static final Font font = new Font(Font.SANS_SERIF,Font.BOLD,28);
     
     public SetGame(SetGameLogic board) {
         this.board = board;
@@ -35,7 +33,6 @@ public class SetGame extends JFrame{
 
     private void intializeGUI(){
         setBackground(BACKGROUND_COLOUR);
-        score = 0;
         gamePanel = new GamePanel(board);
         
         add(gamePanel, BorderLayout.CENTER);

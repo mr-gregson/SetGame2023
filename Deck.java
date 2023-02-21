@@ -38,6 +38,24 @@ public class Deck {
         return deck.get(--size);
     }
 
+    public int size(){
+        return size;
+    }
+
+    public Card dealCard(Card card){
+        if (isEmpty()){
+            return null;
+        }
+        int i = deck.indexOf(card);
+        if (i == -1 || i >= size){
+            return null;
+        }
+        Card temp = deck.get(i);
+        deck.set(i,deck.get(size-1));
+        deck.set(size-1,temp);
+        return deck.get(--size);
+    }
+
     public boolean isEmpty() {
         return size == 0;
     }

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SetGameLogic {
@@ -47,7 +48,7 @@ public class SetGameLogic {
         return true;
     }
 
-    public boolean hasSet(){
+    public List<Integer> getSet(){
         List<Integer> selectedCards = new ArrayList<>();
         for (int i = 0; i < 3; ++i){
             selectedCards.add(0);
@@ -58,14 +59,52 @@ public class SetGameLogic {
                 selectedCards.set(1,j);
                 for (int k = j + 1; j < cardsOnBoard(); ++k){
                     selectedCards.set(2,k);
-                    if (isSet(selectedCards)) return true;
+                    if (isSet(selectedCards)) return selectedCards;
                 }
             } 
         }
-        return false;
+        return null;
     }
 
+    public boolean hasSet(){
+        return getSet() != null;
+    }
 
+    public void extendBoard(){
+        if (isExtended) return;
+        Card thirdCard = null;
+        while (thirdCard == null){
+            int[] indeces = randomPair();
+            Card card1 = cardAt(indeces[0]);
+            Card card2 = cardAt(indeces[1]);
+            thirdCard = completeSet(card1, card2);
+        }
+        List<Card> extensionCards = new ArrayList<>();
+        extensionCards.add(thirdCard);
+        extensionCards.add(deck.deal());
+        extensionCards.add(deck.deal());
+        Collections.shuffle(extensionCards);
+        for (int i = BOARD_SIZE; i < BOARD_SIZE_X; ++i) board[i] = extensionCards.get(i - BOARD_SIZE);
+        isExtended = true;
+    }
+
+    public boolean isExtended(){
+        return isExtended;
+    }
+
+    public void collapseBoard(List<Integer> selectedCards){
+        if (!isExtended) return;
+        for (Integer i : selectedCards){
+            if (i >= BOARD_SIZE) board[i] = null;
+            else{
+                int k = BOARD_SIZE;
+                while (board[k] == null) ++k;  
+                board[i] = board[k]; 
+                board[k] = null; 
+            }
+        }
+        isExtended = false;
+    }
 
     public String notSetMessage(Card[] cards){
     
@@ -83,5 +122,22 @@ public class SetGameLogic {
             for (int j = 0; j < sums.length; ++j) sums[j] += attributes[j];
         }
         return sums;
+    }
+
+    private Card completeSet(Card card1, Card card2){
+        int[] attributes = new int[4];
+        for (int i = 0; i < attributes.length; ++i){
+            attributes[i] = (6 - card1.getAttributes()[i] - card2.getAttributes()[i]) % 3;
+        }
+        return new Card(Colour.values()[attributes[0]], Shape.values()[attributes[1]], 
+                        Count.values()[attributes[2]], Fill.values()[attributes[3]]);
+    }
+
+    private int[] randomPair(){
+        int[] pair = new int[2];
+        pair[0] = (int) (Math.random() * BOARD_SIZE);
+        pair[1] = (int) (Math.random() * BOARD_SIZE);
+        while (pair[0] == pair[1]) pair[1] = (int) (Math.random() * BOARD_SIZE_X);
+        return pair;
     }
 }
