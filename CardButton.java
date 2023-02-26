@@ -23,6 +23,7 @@ public class CardButton extends JButton{
         setBorder(BorderFactory.createEmptyBorder());
         setSize(new Dimension(GamePanel.CARD_WIDTH,GamePanel.CARD_HEIGHT));
         setIcon(imageIcon);
+        setDisabledIcon(imageIcon);
         addMouseListener(mouseListener);
     }
 

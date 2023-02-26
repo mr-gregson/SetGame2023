@@ -8,6 +8,7 @@ public class SetGameLogic {
     private Card[] board;
     private boolean isExtended;
     private int score;
+
     // Game Panel Dimensions
     
     public static final int BOARD_SIZE = 12;
@@ -60,7 +61,7 @@ public class SetGameLogic {
             selectedCards.set(0,i);
             for (int j = i + 1; j < cardsOnBoard(); ++j){
                 selectedCards.set(1,j);
-                for (int k = j + 1; j < cardsOnBoard(); ++k){
+                for (int k = j + 1; k < cardsOnBoard(); ++k){
                     selectedCards.set(2,k);
                     if (isSet(selectedCards)) return selectedCards;
                 }
@@ -107,6 +108,10 @@ public class SetGameLogic {
             }
         }
         isExtended = false;
+    }
+
+    public Hint getHint(){
+        return new Hint(getSet());
     }
 
     public String notSetMessage(Card[] cards){
