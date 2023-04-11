@@ -223,7 +223,7 @@ public class GamePanel extends JPanel {
     private void cardAction(MouseEvent e) {
         CardButton cardButton = (CardButton) e.getComponent();
         int i = cardButton.getIndex();
-        if (board.cardAt(i) == null)
+        if (board.cardAt(i) == null || hint.isHinted(i))
             return;
         isSelected[i] = !isSelected[i];
         updateMessage("");

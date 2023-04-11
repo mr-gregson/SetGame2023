@@ -17,6 +17,13 @@ public class Hint {
         return hintsUsed;
     }
 
+    public boolean isHinted(int index) {
+        for (int i = 0; i < hintsUsed; ++i) {
+            if (selectedCards.get(i) == index) return true;
+        }
+        return false;
+    }
+
     public int getHint(){
         if (hintsUsed < 2) 
             return selectedCards.get(hintsUsed++);
